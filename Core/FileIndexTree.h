@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <fstream>
 
 class FileIndexTree;
 
@@ -11,9 +12,11 @@ private:
 	std::map<std::wstring, std::unique_ptr<IndexTreeNode>> children;
 
 public:
-	IndexTreeNode(IndexEntry entry);
-
 	IndexEntry entry;
+
+	IndexTreeNode();
+
+	IndexTreeNode(IndexEntry entry);
 
 	void addChild(IndexEntry entry, std::vector<std::wstring> path);
 
@@ -28,11 +31,13 @@ private:
 	IndexTreeNode root;
 
 public:
-	void addEntry(IndexEntry entry);
+	FileIndexTree(IndexEntry root);
+
+	FileIndexTree(std::ifstream dat_file);
 
 	size_t size();
 
-	FileIndexTree(IndexEntry root);
+	void addEntry(IndexEntry entry);
 
 	friend std::wostream& operator<<(std::wostream& os, const FileIndexTree& tree);
 };

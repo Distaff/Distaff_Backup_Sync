@@ -2,6 +2,8 @@
 #include <string>
 #include <openssl/md5.h>
 
+//TODO
+/*
 const char HEX_LOOKUP[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 class md5_t {
@@ -18,3 +20,5 @@ public:
 	//	this->data[0]
 	//}
 };
+
+*/

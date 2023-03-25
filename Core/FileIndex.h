@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
 #include <filesystem>
+#include <fstream>
+
+#pragma pack(push, 1)	//Disable padding
 
 class FileIndexHeader {
 public:
@@ -12,6 +15,9 @@ public:
 	std::filesystem::file_time_type date_modified;
 
 	uint64_t entries_count;
+
+	friend std::ifstream& operator>>(std::wostream& os, const FileIndexHeader& header);
+	friend std::ofstream& operator<<(std::wostream& os, const FileIndexHeader& header);
 };
 
 class IndexEntry {
@@ -33,4 +39,14 @@ public:
 	IndexEntry(const IndexEntry& rhs);
 
 	IndexEntry(void);
+
+	friend std::ifstream& operator>>(std::wostream& os, const IndexEntry& entry);
+	friend std::ofstream& operator<<(std::wostream& os, const IndexEntry& entry);
 };	
+
+std::ifstream& operator>>(std::wostream& os, const FileIndexHeader& header);
+std::ofstream& operator<<(std::wostream& os, const FileIndexHeader& header);
+std::ifstream& operator>>(std::wostream& os, const IndexEntry& entry);
+std::ofstream& operator<<(std::wostream& os, const IndexEntry& entry);
+
+#pragma pack(pop)

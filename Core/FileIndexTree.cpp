@@ -21,6 +21,13 @@ std::vector<std::basic_string<T>> splitString(std::basic_string<T> str, T separa
 }
 
 
+/*		IndexTreeNode		*/
+
+IndexTreeNode::IndexTreeNode() { };
+
+IndexTreeNode::IndexTreeNode(IndexEntry entry) {
+	this->entry = entry;
+}
 
 void IndexTreeNode::addChild(IndexEntry entry, std::vector<std::wstring> path) {
 	if (!(this->entry.is_directory))
@@ -45,8 +52,31 @@ void IndexTreeNode::addChild(IndexEntry entry, std::vector<std::wstring> path) {
 	}
 }
 
-IndexTreeNode::IndexTreeNode(IndexEntry entry) {
-	this->entry = entry;
+std::wostream& operator<<(std::wostream& os, const IndexTreeNode& node)
+{
+	os << "Entry: " << node.entry.date_modified << '\t' << node.entry.file_path << '\n';
+	for (auto& i : node.children) {
+		os << *(i.second);
+	}
+	return os;
+}
+
+
+/*		FileIndexTree		*/
+
+
+FileIndexTree::FileIndexTree(IndexEntry root) : root(IndexTreeNode(root)) {
+	this->entries_count = 0;
+};
+
+FileIndexTree::FileIndexTree(std::ifstream dat_file) : root(IndexTreeNode()) {
+	this->entries_count = 0;
+	this->entries_count = 0;
+}
+
+
+size_t FileIndexTree::size() {
+	return this->entries_count;
 }
 
 void FileIndexTree::addEntry(IndexEntry entry) {
@@ -62,26 +92,8 @@ void FileIndexTree::addEntry(IndexEntry entry) {
 	entries_count++;
 }
 
-FileIndexTree::FileIndexTree(IndexEntry root) : root(IndexTreeNode(root)) {
-	this->entries_count = 0;
-};
-
-size_t FileIndexTree::size() {
-	return this->entries_count;
-}
-
-
 std::wostream& operator<<(std::wostream& os, const FileIndexTree& tree)
 {
 	os << tree.root;
-	return os;
-}
-
-std::wostream& operator<<(std::wostream& os, const IndexTreeNode& node)
-{
-	os << "Entry: " << node.entry.date_modified << '\t' << node.entry.file_path << '\n';
-	for (auto& i : node.children) {
-		os << *(i.second);
-	}
 	return os;
 }
